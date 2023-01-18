@@ -1,0 +1,46 @@
+Overview
+If you receive an error telling you that you do not have permissions to create a directory or to write a file to a directory, this is likely an indication that your script is attempting to write to a directory that you do not own. 
+
+This is a somewhat common pitfall that many users run into when moving into a CI environment. 
+
+Builds run as the distiller user on MacOS and typically ubunutu on Linux. These users only have write permissions in their $HOME folders and places like /tmp. This is not unique to CI and is true by default in almost all Linux/Unix environments.
+
+To confirm the user your build runs as has proper permissions, you can run the whoami command within your build process.
+
+Solution
+
+There are a couple of possible solutions to this issue:
+
+Create a folder that the user running the build has permissions to.
+Change the ownership of the directory with the chown command before trying to write to it.
+We recommend the first solution. If you decide to go with the second solution then a command like this should work in both MacOS and Linux builds.
+
+chown -R $USER:$USER /path/to/directory
+
+$USER is a global environment variable that refers to the current logged in user.
+
+/path/to/directory should be replaced with the path to where you want to write to.
+
+Was this article helpful?
+ 
+135 out of 630 found this helpful
+ 
+ 
+ 
+ 
+ 
+Comments
+0 comments
+Article is closed for comments.
+
+Articles in this section
+Architecture Change: Setup_remote_docker
+Troubleshooting Workflows with an Undefined End Time
+An error occurred while fetching your repositories. Please refresh to try again.
+How to install NPM on Windows images
+How To Set Up jEnv on CircleCI With $BASH_ENV
+Cancel All Job
+How to resolve `The following signatures couldn't be verified because the public key is not available` when building a docker image
+Checkout Step Intermittently Failing
+How To Retry an Intermittently Failing Step
+Error received: This job was claimed but has not received a heartbeat in over 5 minutes
